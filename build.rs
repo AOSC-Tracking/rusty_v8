@@ -407,32 +407,6 @@ fn build_v8(is_asan: bool) {
   {
     gn_args.push("v8_monolithic_for_shared_library=true".to_string());
   }
-  // cross-compilation setup
-  if target_arch == "aarch64" {
-    gn_args.push(r#"target_cpu="arm64""#.to_string());
-    if target_os == "linux" {
-      gn_args.push("use_sysroot=true".to_string());
-      maybe_install_sysroot("arm64");
-      maybe_install_sysroot("amd64");
-    }
-  }
-  if target_arch == "arm" {
-    gn_args.push(r#"target_cpu="arm""#.to_string());
-    gn_args.push(r#"v8_target_cpu="arm""#.to_string());
-    gn_args.push("use_sysroot=true".to_string());
-    maybe_install_sysroot("i386");
-    maybe_install_sysroot("arm");
-  }
-  if target_arch == "riscv64" {
-    gn_args.push(r#"target_cpu="riscv64""#.to_string());
-    // Cross compiling needs to set v8_target_cpu
-    gn_args.push(r#"v8_target_cpu="riscv64""#.to_string());
-    if target_os == "linux" {
-      gn_args.push("use_sysroot=true".to_string());
-      maybe_install_sysroot("riscv64");
-      maybe_install_sysroot("amd64");
-    }
-  }
 
   // musl libc. V8's build targets glibc by default; the vendored build config
   // grows a target-scoped `use_musl` arg (see //build/config/rust.gni,
